@@ -1,30 +1,30 @@
-from fastapi import FastAPI
+from starlette.middleware.authentication import AuthenticationMiddleware
 from fastapi.routing import APIRoute
-from starlette.middleware.cors import CORSMiddleware
-
-from app.view.api.routes.api import router
-from app.core.config import settings
+from app.create_app import create_app
+from app.middleware.authentication import AuthMiddleware, authentication_error_handler
+from app import di
 
 
 def custom_generate_unique_id(route: APIRoute):
     return f"{route.tags[0]}-{route.name}"
 
 
-app = FastAPI(
-    title=settings.APP_NAME,
-    openapi_url=f"{settings.API_PREFIX}/openapi.json",
-    docs_url=f"{settings.API_PREFIX}/docs",
-    # generate_unique_id_function=custom_generate_unique_id,
+app = create_app()
+
+app.add_middleware(
+    middleware_class=AuthenticationMiddleware,
+    backend=AuthMiddleware(),
+    on_error=authentication_error_handler
 )
 
 # Set all CORS enabled origins
 # if settings.BACKEND_CORS_ORIGINS:
 #     app.add_middleware(
 #         CORSMiddleware,
-#         allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+#         allow_origins=[
+#           str(origin) for origin in settings.BACKEND_CORS_ORIGINS
+#           ],
 #         allow_credentials=True,
 #         allow_methods=["*"],
 #         allow_headers=["*"],
 #     )
-
-app.include_router(router, prefix=settings.API_PREFIX)
