@@ -19,7 +19,7 @@ async def get_users(
     return await repo.get_many()
 
 
-@router.post("", response_model=User, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)
 async def create_user(
         user: CreateUser = Body(),
         repo: UserRepository = Depends(lambda: di[UserRepository]),

@@ -37,6 +37,8 @@ class SearchMixin:
             filters = {"_id": record_id}
 
         record: Dict = await self.collection.find_one(filters)
+        if record is None:
+            return record
 
         if return_model:
             return return_model.parse_obj(record)
@@ -47,15 +49,24 @@ class WriteMixin:
     model: Type[BaseModel]
     collection: Collection
 
-    async def create(self, record: BaseModel) -> Dict | BaseModel:
-        new_record = await self.collection.insert_one(
-            record.model_dump(by_alias=True, exclude={"id"})
-        )
+    async def create(self, record: BaseModel | Dict, return_model: BaseModel = None) -> Dict | BaseModel:
+
+        if isinstance(record, BaseModel):
+            new_record = await self.collection.insert_one(
+                record.model_dump(by_alias=True, exclude={"id"})
+            )
+        else:
+            new_record = await self.collection.insert_one(
+                record
+            )
         created_record = await self.collection.find_one(
             {"_id": new_record.inserted_id}
         )
 
         try:
+            if return_model:
+                return return_model.parse_obj(created_record)
+
             return self.model.parse_obj(created_record)
         except Exception as e:
             return created_record

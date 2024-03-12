@@ -1,5 +1,7 @@
 from starlette.middleware.authentication import AuthenticationMiddleware
 from fastapi.routing import APIRoute
+from starlette.middleware.cors import CORSMiddleware
+
 from app.create_app import create_app
 from app.middleware.authentication import AuthMiddleware, authentication_error_handler
 from app import di
@@ -17,14 +19,12 @@ app.add_middleware(
     on_error=authentication_error_handler
 )
 
-# Set all CORS enabled origins
-# if settings.BACKEND_CORS_ORIGINS:
-#     app.add_middleware(
-#         CORSMiddleware,
-#         allow_origins=[
-#           str(origin) for origin in settings.BACKEND_CORS_ORIGINS
-#           ],
-#         allow_credentials=True,
-#         allow_methods=["*"],
-#         allow_headers=["*"],
-#     )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "*"
+ ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

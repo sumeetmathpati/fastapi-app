@@ -15,7 +15,7 @@ from fastapi import status
 
 class UserRepository(AbstractMongoRepository, SearchMixin, WriteMixin):
     def __init__(self, client: AsyncIOMotorClient, settings: Settings):
-        db = client.get_database("movie_db")
+        db = client.get_database("poller")
         self.collection = db.get_collection("user")
         self.model = User
         self.settings = settings
