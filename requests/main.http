@@ -1,0 +1,28 @@
+@base=http://127.0.0.1:8000
+
+
+### Log in
+
+POST {{base}}/api/v1/auth/login
+Authorization: dfef
+
+{
+  "email": "ss",
+  "password": "string"
+}
+
+### Create user
+
+POST {{base}}/api/v1/users
+Authorization: dfef
+
+{
+  "name": "string",
+  "email": "ss",
+  "password": "string"
+}
+
+### Get movies
+
+GET {{base}}/api/v1/movies
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzcyIsImV4cCI6MTcwOTkwNTUwMn0.FOefFYRx0yc2QyOqsR9_Zw1EhI2VqV3dlqic34a_Gnc
