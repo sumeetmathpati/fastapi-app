@@ -10,6 +10,12 @@ python = "^3.11"
 fastapi = "^0.109.2"
 pydantic-settings = "^2.2.1"
 pre-commit = "^3.6.2"
+motor = "^3.3.2"
+python-multipart = "^0.0.9"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+kink = "^0.7.0"
+bcrypt = "4.0.1"
 
 
 [build-system]
